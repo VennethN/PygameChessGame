@@ -4,7 +4,7 @@ GameState
 
 import pygame as p
 import os
-from Chess import ChessEngine
+from chessGamePrototype.Chess import ChessEngine
 p.init()
 WIDTH = HEIGHT = 512 # 400 is another good option
 DIMENSION = 8 # dimensions of chess boards are 8x8
@@ -22,7 +22,7 @@ def loadImages():
     for piece in pieces:
         print(piece);
 
-        IMAGES[piece] = p.transform.scale(p.image.load("ChessImages/"+ piece +".png"), (SQ_SIZE,SQ_SIZE))
+        IMAGES[piece] = p.transform.scale(p.image.load("Chess/ChessImages/"+ piece +".png"), (SQ_SIZE,SQ_SIZE))
     #we can access an image by accessing the dictionary by saying IMAGES["wP"] for example
 #The main driver for our code, this iwll handle user input and updating the graphics
 
@@ -31,18 +31,23 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False # flag variable for when a move is made
     loadImages() # Only do this once, before the while loop
     running = True
     sqSelected = () # no square is selected initially, keeps track of htel ast click of the user(tuple :: row, col)
     playerClicks = [] #keep track of the player's clicks, ex [[6,4],[1,2]]
+
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            #mouse handler
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()#x y of the mouse
                 col = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
+
                 if sqSelected == (row, col): #the user clicked the same square twice, undo
                     sqSelected = ()
                     playerClicks = []
@@ -50,7 +55,24 @@ def main():
                     sqSelected = (row, col)
                     playerClicks.append(sqSelected)# append for both 1st and 2nd clicks
                 if(len(playerClicks) == 2):
+                    move = ChessEngine.Move(playerClicks[0],playerClicks[1],gs.board)
+                    print(move.getChessNotation())
+                    if(move in validMoves):
+                        moveMade = True
+                        gs.makeMove(move)
+                        sqSelected = () #reset user clicks
+                        playerClicks = []
+                    else:
+                        playerClicks = [sqSelected]
                     pass
+            #key handler
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z:
+                    gs.undoMove()
+                    moveMade = True
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
         drawGameState(screen,gs)
         clock.tick(MAX_FPS)
         p.display.flip()
