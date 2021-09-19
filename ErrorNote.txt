@@ -1,0 +1,17 @@
+'''
+Process Process-48:
+Traceback (most recent call last):
+  File "C:\Users\Valent Nathanael\AppData\Local\Programs\Python\Python39\lib\multiprocessing\process.py", line 315, in _bootstrap
+    self.run()
+  File "C:\Users\Valent Nathanael\AppData\Local\Programs\Python\Python39\lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Valent Nathanael\Documents\GitHub\PygameChessGame\chessGamePrototype\Chess\ChessAI.py", line 156, in negaMaxMove
+    findMoveNegaMaxAlphaBeta(gs, validMoves, depth,-CHECKMATE,CHECKMATE ,1 if gs.whiteToMove else -1)
+  File "C:\Users\Valent Nathanael\Documents\GitHub\PygameChessGame\chessGamePrototype\Chess\ChessAI.py", line 231, in findMoveNegaMaxAlphaBeta
+    print(move, score)
+  File "C:\Users\Valent Nathanael\Documents\GitHub\PygameChessGame\chessGamePrototype\Chess\ChessEngine.py", line 645, in __str__
+    endSquare = self.__getRankFile(self.endRow,self.endCol)
+  File "C:\Users\Valent Nathanael\Documents\GitHub\PygameChessGame\chessGamePrototype\Chess\ChessEngine.py", line 665, in __getRankFile
+    return self.colsToFiles[c] + self.rowsToRanks[r]
+KeyError: -1
+'''
